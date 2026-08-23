@@ -1,0 +1,7 @@
+{
+  "normalization": "per_trace_zscore",
+  "downsample_method": "average_pooling",
+  "downsample_factor": 10,
+  "original_length": 50000,
+  "processed_length": 5000
+}

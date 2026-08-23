@@ -14,18 +14,24 @@ import scipy.io
 # ---------------------------------------------------------------------------
 # CONFIG - adjust these
 # ---------------------------------------------------------------------------
-FILENAME = "pqc\data\Reference-PPM"      # folder containing the .mat files
-TRACES_NO = 500                  # START SMALL. Max = 100000. Scale up later.
+FILENAME = "pqc/data/Reference-PPM"   # folder containing the .mat files (forward slashes work on Windows too)
+TRACES_NO = 5000                      # scale up once the small run confirms everything works. Max = 100000.
 TRACES_PER_FILE = 100
-N_FEATS = 50000                  # points per trace (fixed by the dataset)
+N_FEATS = 50000                       # points per trace (fixed by the dataset)
 
 # Which secret-related columns to build your label from:
-#   columns 0,1 -> secret key bytes   (recommended: most direct "is the key leaking" framing)
+#   columns 0,1 -> secret key bytes   (direct "is the key leaking" framing)
 #   columns 2,3 -> input value
 #   columns 4,5 -> output value
-LABEL_COLS = (0, 1)
+#
+# IMPORTANT: the trained kyber_cnn_model was built on the OUTPUT bytes (4,5),
+# not the secret key bytes. Keep this at (4,5) so any accuracy check against
+# that model uses matching labels. Change only if you're training a new model
+# from scratch and deliberately want a different leakage target.
+LABEL_COLS = (4, 5)
 
 # ---------------------------------------------------------------------------
+
 
 def load_raw(traces_no, traces_per_file, n_feats):
     file_no = int(traces_no / traces_per_file)
@@ -64,12 +70,12 @@ if __name__ == "__main__":
     print(f"Loading {TRACES_NO} traces (this may take a while)...")
     traces, vals = load_raw(TRACES_NO, TRACES_PER_FILE, N_FEATS)
 
-    print("Computing Hamming Weight labels...")
+    print(f"Computing Hamming Weight labels (cols {LABEL_COLS})...")
     labels = hamming_weight_labels(vals, LABEL_COLS)
 
     print(f"Traces shape: {traces.shape}  (traces x sample points)")
     print(f"Labels shape: {labels.shape}")
-    print(f"Label distribution (class: count):")
+    print("Label distribution (class: count):")
     unique, counts = np.unique(labels, return_counts=True)
     for u, c in zip(unique, counts):
         print(f"  HW={u}: {c}")
@@ -77,5 +83,6 @@ if __name__ == "__main__":
     # --- Save processed arrays so you never need to touch the .mat files again ---
     np.save("kyber_traces.npy", traces)
     np.save("kyber_labels.npy", labels)
-    print("\nSaved kyber_traces.npy and kyber_labels.npy")
+    np.save("kyber_vals.npy", vals)
+    print("\nSaved kyber_traces.npy, kyber_labels.npy, kyber_vals.npy")
     print("Load them next time with: np.load('kyber_traces.npy')")

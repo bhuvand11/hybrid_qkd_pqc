@@ -1,0 +1,25 @@
+{
+  "model_name": "kyber_cnn_model",
+  "num_classes": 17,
+  "input_shape": [
+    5000,
+    1
+  ],
+  "sequence_length": 5000,
+  "num_training_samples": 10500,
+  "num_validation_samples": 2250,
+  "num_test_samples": 2250,
+  "random_seed": 42,
+  "preprocessing_method": {
+    "normalization": "per_trace_zscore",
+    "downsample_method": "average_pooling",
+    "downsample_factor": 10,
+    "original_length": 50000,
+    "processed_length": 5000
+  },
+  "epochs_run": 80,
+  "best_validation_accuracy": 0.9537777900695801,
+  "test_accuracy": 0.9564444422721863,
+  "test_loss": 0.7111589908599854,
+  "tensorflow_version": "2.20.0"
+}
