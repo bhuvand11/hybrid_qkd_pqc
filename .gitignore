@@ -1,2 +1,6 @@
 c_env/
 Reference-PPM/
+*.npy
+*.npz
+pqc/data/Reference-PPM/*.mat
+__pycache__/
