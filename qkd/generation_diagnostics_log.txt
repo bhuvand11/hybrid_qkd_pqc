@@ -1,0 +1,22 @@
+
+=== Literature sanity checks ===
+Clean QBER mean:           0.0222  (expect ~0.01-0.05)
+Strong IR QBER mean:       0.1349  (expect >0.11)
+PNS QBER mean:             0.0234  (expect ~ clean)
+Clean decoy_anomaly:       1.2439  (expect ~ 0 or slightly pos)
+PNS decoy_anomaly:         1.1328  (expect > clean)
+Clean y1_lower:            0.10618
+PNS y1_lower:              0.10181  (expect << clean)
+Clean yield_ratio:         3.7561  (expect ~ 5.0 absent dark counts)
+PNS yield_ratio:           3.8672  (expect < clean)
+
+Finite-key: n_sifted floor=109, frac_at_floor=0.000 (ideally <0.05)
+
+=== Run-type counts per split ===
+TRAIN (50 runs): clean=18, pure_ir=16, pure_pns=16
+TEST (50 runs): clean=18, pure_pns=16, pure_ir=16
+
+=== Confound diagnostic ===
+  clean vs pure_ir: dist d=0.10, n_sifted d=0.06
+  clean vs pure_pns: dist d=0.02, n_sifted d=0.05
+  pure_ir vs pure_pns: dist d=0.08, n_sifted d=0.11

@@ -1,6 +1,16 @@
-c_env/
+cp_env/
 Reference-PPM/
 *.npy
 *.npz
 pqc/data/Reference-PPM/*.mat
 __pycache__/
+*.csv
+CAPSTONE_CONTEXT.md
+capstoneppt.md
+eda_within_run_report.md
+litreviewcapstone.md
+prompthistoryqkd.md
+prompthistoryqkd2.md
+*.zip
+docs/
+qkd/outputs/qber_timeseries_dataset.csv
