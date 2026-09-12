@@ -1,0 +1,50 @@
+{
+  "qkd_calibration_check": {
+    "platt_coef_sign_positive": true,
+    "window_auc_before_calibration": 0.9746,
+    "window_auc_after_calibration": 0.9746,
+    "matches_original_cached_result_0_9746": true
+  },
+  "qkd_session_separation_check": {
+    "clean_session_mean_prob_range": [
+      0.0083,
+      0.0109
+    ],
+    "attacked_session_mean_prob_range": [
+      0.0409,
+      0.1929
+    ],
+    "gap": 0.03,
+    "auc_1_0_is_genuine": true
+  },
+  "pqc_circularity_fix": {
+    "bug_confirmed": true,
+    "bug_description": "previous ground truth (confidence > median) was derived from the same variable used as the predictor, artificially inflating AUC",
+    "fix": "reverted to raw top-1 correctness as ground truth -- no manipulation",
+    "honest_positive_rate": 0.9564,
+    "matches_original_test_accuracy_0_9564": true,
+    "trace_auc_honest": 0.7344
+  },
+  "joint_evaluation_honest": {
+    "n_bootstrap_pairs": 20000,
+    "joint_positive_rate": 0.9852,
+    "note_on_pr_auc": "PR-AUC is near-ceiling for all detectors here because the true PQC base rate (95.6%) is genuinely high -- this reflects that the reference device is almost always exploitable, not a flaw in the test. AUC and the 5%-FPR recall figure below are the metrics to trust.",
+    "results": {
+      "qkd_alone": {
+        "auc": 0.8258,
+        "pr_auc": 0.9969,
+        "recall_at_5pct_fpr": 0.6916
+      },
+      "pqc_alone": {
+        "auc": 0.7372,
+        "pr_auc": 0.9905,
+        "recall_at_5pct_fpr": 0.0711
+      },
+      "fused_log_odds": {
+        "auc": 0.8608,
+        "pr_auc": 0.9968,
+        "recall_at_5pct_fpr": 0.3803
+      }
+    }
+  }
+}

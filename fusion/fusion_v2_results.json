@@ -1,0 +1,547 @@
+{
+  "qkd_session_detection_auc": 1.0,
+  "pqc_device_risk": {
+    "leaky_reference_device": {
+      "point_estimate": 0.9564,
+      "wilson_95ci": [
+        0.9472,
+        0.9641
+      ],
+      "n": 2250
+    },
+    "safer_baseline_stand_in": {
+      "point_estimate": 0.4233,
+      "wilson_95ci": [
+        0.4057,
+        0.4411
+      ],
+      "n": 3000
+    }
+  },
+  "fused_ranking_auc_matches_qkd_alone": true,
+  "design_note": "Fusion is not expected to change which sessions rank as suspicious (that's QKD's job) -- it correctly calibrates the ABSOLUTE trust level based on known hardware risk, which QKD alone cannot see.",
+  "all_sessions": [
+    {
+      "run_id": 1,
+      "qkd_risk": 0.11919940124581989,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.7482219868903959,
+      "fused_trust_safer_device": 0.09035775104226536,
+      "trust_score_leaky_device_pct": 25.18,
+      "trust_score_safer_device_pct": 90.96
+    },
+    {
+      "run_id": 3,
+      "qkd_risk": 0.008812159907664934,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.16333970111928098,
+      "fused_trust_safer_device": 0.0064833559813043135,
+      "trust_score_leaky_device_pct": 83.67,
+      "trust_score_safer_device_pct": 99.35
+    },
+    {
+      "run_id": 5,
+      "qkd_risk": 0.00834662212598656,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.15599542109750625,
+      "fused_trust_safer_device": 0.0061400845104846394,
+      "trust_score_leaky_device_pct": 84.4,
+      "trust_score_safer_device_pct": 99.39
+    },
+    {
+      "run_id": 7,
+      "qkd_risk": 0.0099159743371934,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.1802791540453012,
+      "fused_trust_safer_device": 0.007297611253283536,
+      "trust_score_leaky_device_pct": 81.97,
+      "trust_score_safer_device_pct": 99.27
+    },
+    {
+      "run_id": 9,
+      "qkd_risk": 0.12368529950384889,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.7560603977826,
+      "fused_trust_safer_device": 0.09387391642099958,
+      "trust_score_leaky_device_pct": 24.39,
+      "trust_score_safer_device_pct": 90.61
+    },
+    {
+      "run_id": 11,
+      "qkd_risk": 0.19157229154112282,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.8388044555323235,
+      "fused_trust_safer_device": 0.1481649058033101,
+      "trust_score_leaky_device_pct": 16.12,
+      "trust_score_safer_device_pct": 85.18
+    },
+    {
+      "run_id": 13,
+      "qkd_risk": 0.17516886085303313,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.8234294242780744,
+      "fused_trust_safer_device": 0.13485823001735073,
+      "trust_score_leaky_device_pct": 17.66,
+      "trust_score_safer_device_pct": 86.51
+    },
+    {
+      "run_id": 15,
+      "qkd_risk": 0.009922487757225375,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.18037718518353324,
+      "fused_trust_safer_device": 0.007302417457098159,
+      "trust_score_leaky_device_pct": 81.96,
+      "trust_score_safer_device_pct": 99.27
+    },
+    {
+      "run_id": 17,
+      "qkd_risk": 0.07640530700373664,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.6449614719520484,
+      "fused_trust_safer_device": 0.0572452110142576,
+      "trust_score_leaky_device_pct": 35.5,
+      "trust_score_safer_device_pct": 94.28
+    },
+    {
+      "run_id": 19,
+      "qkd_risk": 0.009040901573746422,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.1669041624072484,
+      "fused_trust_safer_device": 0.00665205340399599,
+      "trust_score_leaky_device_pct": 83.31,
+      "trust_score_safer_device_pct": 99.33
+    },
+    {
+      "run_id": 21,
+      "qkd_risk": 0.0629922959428212,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.5961638624350956,
+      "fused_trust_safer_device": 0.047024514675992696,
+      "trust_score_leaky_device_pct": 40.38,
+      "trust_score_safer_device_pct": 95.3
+    },
+    {
+      "run_id": 23,
+      "qkd_risk": 0.010415023776941593,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.1877265229826652,
+      "fused_trust_safer_device": 0.007665904472594863,
+      "trust_score_leaky_device_pct": 81.23,
+      "trust_score_safer_device_pct": 99.23
+    },
+    {
+      "run_id": 25,
+      "qkd_risk": 0.08112229957410193,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.659707338869484,
+      "fused_trust_safer_device": 0.06085726902825557,
+      "trust_score_leaky_device_pct": 34.03,
+      "trust_score_safer_device_pct": 93.91
+    },
+    {
+      "run_id": 27,
+      "qkd_risk": 0.008774940712762122,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.1627569868932701,
+      "fused_trust_safer_device": 0.006455908699253217,
+      "trust_score_leaky_device_pct": 83.72,
+      "trust_score_safer_device_pct": 99.35
+    },
+    {
+      "run_id": 29,
+      "qkd_risk": 0.04087759973932413,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.48344329845215656,
+      "fused_trust_safer_device": 0.03033414598127122,
+      "trust_score_leaky_device_pct": 51.66,
+      "trust_score_safer_device_pct": 96.97
+    },
+    {
+      "run_id": 31,
+      "qkd_risk": 0.058190137912024924,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.5756882707577294,
+      "fused_trust_safer_device": 0.04338328508628566,
+      "trust_score_leaky_device_pct": 42.43,
+      "trust_score_safer_device_pct": 95.66
+    },
+    {
+      "run_id": 33,
+      "qkd_risk": 0.1347465327474263,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.7737412800807918,
+      "fused_trust_safer_device": 0.1025811906358114,
+      "trust_score_leaky_device_pct": 22.63,
+      "trust_score_safer_device_pct": 89.74
+    },
+    {
+      "run_id": 35,
+      "qkd_risk": 0.009004240272734786,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.16633480736364042,
+      "fused_trust_safer_device": 0.006625014238596978,
+      "trust_score_leaky_device_pct": 83.37,
+      "trust_score_safer_device_pct": 99.34
+    },
+    {
+      "run_id": 37,
+      "qkd_risk": 0.0677236520745608,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.6146714726560347,
+      "fused_trust_safer_device": 0.050621323293069016,
+      "trust_score_leaky_device_pct": 38.53,
+      "trust_score_safer_device_pct": 94.94
+    },
+    {
+      "run_id": 39,
+      "qkd_risk": 0.04973229536110485,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.5347180994538954,
+      "fused_trust_safer_device": 0.03699306095166239,
+      "trust_score_leaky_device_pct": 46.53,
+      "trust_score_safer_device_pct": 96.3
+    },
+    {
+      "run_id": 41,
+      "qkd_risk": 0.00941700097149103,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.17270283688671229,
+      "fused_trust_safer_device": 0.006929472177289992,
+      "trust_score_leaky_device_pct": 82.73,
+      "trust_score_safer_device_pct": 99.31
+    },
+    {
+      "run_id": 43,
+      "qkd_risk": 0.16712704091917469,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.8150341151310924,
+      "fused_trust_safer_device": 0.12837899369785702,
+      "trust_score_leaky_device_pct": 18.5,
+      "trust_score_safer_device_pct": 87.16
+    },
+    {
+      "run_id": 45,
+      "qkd_risk": 0.11166402686279785,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.7340619475037184,
+      "fused_trust_safer_device": 0.08447079044264486,
+      "trust_score_leaky_device_pct": 26.59,
+      "trust_score_safer_device_pct": 91.55
+    },
+    {
+      "run_id": 47,
+      "qkd_risk": 0.04856620738009335,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.528504885281438,
+      "fused_trust_safer_device": 0.03611432167598701,
+      "trust_score_leaky_device_pct": 47.15,
+      "trust_score_safer_device_pct": 96.39
+    },
+    {
+      "run_id": 49,
+      "qkd_risk": 0.009539947171394343,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.17458188973690583,
+      "fused_trust_safer_device": 0.007020171931839153,
+      "trust_score_leaky_device_pct": 82.54,
+      "trust_score_safer_device_pct": 99.3
+    },
+    {
+      "run_id": 51,
+      "qkd_risk": 0.00970210449072519,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.17704792037281514,
+      "fused_trust_safer_device": 0.007139807571928058,
+      "trust_score_leaky_device_pct": 82.3,
+      "trust_score_safer_device_pct": 99.29
+    },
+    {
+      "run_id": 53,
+      "qkd_risk": 0.10300193667270387,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.7160352995019238,
+      "fused_trust_safer_device": 0.0777335682542207,
+      "trust_score_leaky_device_pct": 28.4,
+      "trust_score_safer_device_pct": 92.23
+    },
+    {
+      "run_id": 55,
+      "qkd_risk": 0.009089771275510845,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.16766197277118758,
+      "fused_trust_safer_device": 0.006688097571780085,
+      "trust_score_leaky_device_pct": 83.23,
+      "trust_score_safer_device_pct": 99.33
+    },
+    {
+      "run_id": 57,
+      "qkd_risk": 0.010854620575215333,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.19418153388433096,
+      "fused_trust_safer_device": 0.007990403503978815,
+      "trust_score_leaky_device_pct": 80.58,
+      "trust_score_safer_device_pct": 99.2
+    },
+    {
+      "run_id": 59,
+      "qkd_risk": 0.1495699833267769,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.7943270052202235,
+      "fused_trust_safer_device": 0.11433371014395781,
+      "trust_score_leaky_device_pct": 20.57,
+      "trust_score_safer_device_pct": 88.57
+    },
+    {
+      "run_id": 61,
+      "qkd_risk": 0.047751264727867004,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.5240725540247816,
+      "fused_trust_safer_device": 0.035500525877774386,
+      "trust_score_leaky_device_pct": 47.59,
+      "trust_score_safer_device_pct": 96.45
+    },
+    {
+      "run_id": 63,
+      "qkd_risk": 0.010287894785745938,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.1858415287089729,
+      "fused_trust_safer_device": 0.007572075311864035,
+      "trust_score_leaky_device_pct": 81.42,
+      "trust_score_safer_device_pct": 99.24
+    },
+    {
+      "run_id": 65,
+      "qkd_risk": 0.08015034076154147,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.656757877919769,
+      "fused_trust_safer_device": 0.06011222967145684,
+      "trust_score_leaky_device_pct": 34.32,
+      "trust_score_safer_device_pct": 93.99
+    },
+    {
+      "run_id": 67,
+      "qkd_risk": 0.1604766012685495,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.8076013815781797,
+      "fused_trust_safer_device": 0.12304265650228595,
+      "trust_score_leaky_device_pct": 19.24,
+      "trust_score_safer_device_pct": 87.7
+    },
+    {
+      "run_id": 69,
+      "qkd_risk": 0.16729246207662515,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.8152131339645724,
+      "fused_trust_safer_device": 0.12851198009609982,
+      "trust_score_leaky_device_pct": 18.48,
+      "trust_score_safer_device_pct": 87.15
+    },
+    {
+      "run_id": 71,
+      "qkd_risk": 0.11324524331149968,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.7371431940454263,
+      "fused_trust_safer_device": 0.0857040879319268,
+      "trust_score_leaky_device_pct": 26.29,
+      "trust_score_safer_device_pct": 91.43
+    },
+    {
+      "run_id": 73,
+      "qkd_risk": 0.1376261159004437,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.7779979423762006,
+      "fused_trust_safer_device": 0.10485669008601756,
+      "trust_score_leaky_device_pct": 22.2,
+      "trust_score_safer_device_pct": 89.51
+    },
+    {
+      "run_id": 75,
+      "qkd_risk": 0.08596674965547349,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.6737684460184138,
+      "fused_trust_safer_device": 0.06457658379346536,
+      "trust_score_leaky_device_pct": 32.62,
+      "trust_score_safer_device_pct": 93.54
+    },
+    {
+      "run_id": 77,
+      "qkd_risk": 0.12862024328504054,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.7642227448256358,
+      "fused_trust_safer_device": 0.09775209210245218,
+      "trust_score_leaky_device_pct": 23.58,
+      "trust_score_safer_device_pct": 90.22
+    },
+    {
+      "run_id": 79,
+      "qkd_risk": 0.07033968798782472,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.6242677021822438,
+      "fused_trust_safer_device": 0.05261401214819515,
+      "trust_score_leaky_device_pct": 37.57,
+      "trust_score_safer_device_pct": 94.74
+    },
+    {
+      "run_id": 81,
+      "qkd_risk": 0.009176169291038063,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.16899853975058635,
+      "fused_trust_safer_device": 0.006751823290961692,
+      "trust_score_leaky_device_pct": 83.1,
+      "trust_score_safer_device_pct": 99.32
+    },
+    {
+      "run_id": 83,
+      "qkd_risk": 0.008809685911301164,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.16330099134408943,
+      "fused_trust_safer_device": 0.006481531516663943,
+      "trust_score_leaky_device_pct": 83.67,
+      "trust_score_safer_device_pct": 99.35
+    },
+    {
+      "run_id": 85,
+      "qkd_risk": 0.010767174182304393,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.19290520909259926,
+      "fused_trust_safer_device": 0.007925846765695849,
+      "trust_score_leaky_device_pct": 80.71,
+      "trust_score_safer_device_pct": 99.21
+    },
+    {
+      "run_id": 87,
+      "qkd_risk": 0.1419912438097026,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.7842041449606582,
+      "fused_trust_safer_device": 0.10831300240588419,
+      "trust_score_leaky_device_pct": 21.58,
+      "trust_score_safer_device_pct": 89.17
+    },
+    {
+      "run_id": 89,
+      "qkd_risk": 0.08016431960550181,
+      "qkd_true": 1,
+      "attack_kind": "pns_like",
+      "fused_trust_leaky_device": 0.656800615253449,
+      "fused_trust_safer_device": 0.060122942138970174,
+      "trust_score_leaky_device_pct": 34.32,
+      "trust_score_safer_device_pct": 93.99
+    },
+    {
+      "run_id": 91,
+      "qkd_risk": 0.11891544682287032,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.7477116174113166,
+      "fused_trust_safer_device": 0.09013547168949336,
+      "trust_score_leaky_device_pct": 25.23,
+      "trust_score_safer_device_pct": 90.99
+    },
+    {
+      "run_id": 93,
+      "qkd_risk": 0.08022932005507007,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.6569992175883239,
+      "fused_trust_safer_device": 0.06017275528186215,
+      "trust_score_leaky_device_pct": 34.3,
+      "trust_score_safer_device_pct": 93.98
+    },
+    {
+      "run_id": 95,
+      "qkd_risk": 0.17242499060162134,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.8206338818432395,
+      "fused_trust_safer_device": 0.13264424837294023,
+      "trust_score_leaky_device_pct": 17.94,
+      "trust_score_safer_device_pct": 86.74
+    },
+    {
+      "run_id": 97,
+      "qkd_risk": 0.1929093911436588,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.8399653255402194,
+      "fused_trust_safer_device": 0.14925497367497895,
+      "trust_score_leaky_device_pct": 16.0,
+      "trust_score_safer_device_pct": 85.07
+    },
+    {
+      "run_id": 99,
+      "qkd_risk": 0.009711311146757658,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.17718751408449293,
+      "fused_trust_safer_device": 0.007146600324350857,
+      "trust_score_leaky_device_pct": 82.28,
+      "trust_score_safer_device_pct": 99.29
+    }
+  ],
+  "concrete_examples": {
+    "cleanest_session": {
+      "run_id": 5,
+      "qkd_risk": 0.00834662212598656,
+      "qkd_true": 0,
+      "attack_kind": "none",
+      "fused_trust_leaky_device": 0.15599542109750625,
+      "fused_trust_safer_device": 0.0061400845104846394,
+      "trust_score_leaky_device_pct": 84.4,
+      "trust_score_safer_device_pct": 99.39
+    },
+    "most_attacked_session": {
+      "run_id": 97,
+      "qkd_risk": 0.1929093911436588,
+      "qkd_true": 1,
+      "attack_kind": "intercept_resend",
+      "fused_trust_leaky_device": 0.8399653255402194,
+      "fused_trust_safer_device": 0.14925497367497895,
+      "trust_score_leaky_device_pct": 16.0,
+      "trust_score_safer_device_pct": 85.07
+    }
+  }
+}

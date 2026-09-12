@@ -1,0 +1,42 @@
+{
+  "model": "PCA(100) + RandomForestClassifier(n_estimators=200)",
+  "random_seed": 42,
+  "source": "pqc/scripts/PQC.ipynb, Cell 4 (extracted from cached notebook output)",
+  "pca_n_components": 100,
+  "pca_explained_variance_ratio": 0.9769,
+  "split": {
+    "method": "train_test_split(test_size=0.2, stratify=labels)",
+    "note": "80/20 stratified split -- NOT the same split object as the CNN's 70/15/15 stratified split used in model_metadata.json. Comparable as a standalone classical baseline, but not an exact same-test-set comparison against the CNN."
+  },
+  "total_traces": 15000,
+  "test_set_size": 3000,
+  "num_classes": 17,
+  "random_guess_baseline_pct": 5.88,
+  "test_accuracy_pct": 42.33,
+  "classification_report": {
+    "0":  {"precision": 0.00, "recall": 0.00, "f1": 0.00, "support": 1},
+    "1":  {"precision": 0.00, "recall": 0.00, "f1": 0.00, "support": 12},
+    "2":  {"precision": 0.00, "recall": 0.00, "f1": 0.00, "support": 48},
+    "3":  {"precision": 0.61, "recall": 0.13, "f1": 0.21, "support": 148},
+    "4":  {"precision": 0.47, "recall": 0.49, "f1": 0.48, "support": 285},
+    "5":  {"precision": 0.41, "recall": 0.67, "f1": 0.51, "support": 371},
+    "6":  {"precision": 0.46, "recall": 0.66, "f1": 0.54, "support": 341},
+    "7":  {"precision": 0.57, "recall": 0.16, "f1": 0.26, "support": 213},
+    "8":  {"precision": 1.00, "recall": 0.01, "f1": 0.02, "support": 163},
+    "9":  {"precision": 0.46, "recall": 0.15, "f1": 0.22, "support": 217},
+    "10": {"precision": 0.40, "recall": 0.59, "f1": 0.47, "support": 336},
+    "11": {"precision": 0.38, "recall": 0.63, "f1": 0.47, "support": 357},
+    "12": {"precision": 0.42, "recall": 0.46, "f1": 0.44, "support": 295},
+    "13": {"precision": 0.62, "recall": 0.05, "f1": 0.10, "support": 151},
+    "14": {"precision": 0.00, "recall": 0.00, "f1": 0.00, "support": 49},
+    "15": {"precision": 0.00, "recall": 0.00, "f1": 0.00, "support": 12},
+    "16": {"precision": 0.00, "recall": 0.00, "f1": 0.00, "support": 1},
+    "accuracy": 0.4233,
+    "macro_avg": {"precision": 0.34, "recall": 0.24, "f1": 0.22},
+    "weighted_avg": {"precision": 0.47, "recall": 0.42, "f1": 0.37}
+  },
+  "cnn_comparison": {
+    "cnn_test_accuracy_pct": 95.64,
+    "cnn_split": "70/15/15 stratified, random_state=42 (see model_metadata.json)"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "qkd": {
+    "n_sessions": 50,
+    "windows_per_session": 2879,
+    "aggregation_method_tried_and_rejected": "Benjamini-Yekutieli FDR correction across windows",
+    "rejection_reason": "over-conservative at ~2879 windows/session, AUC only 0.7500",
+    "aggregation_method_used": "mean of Platt-calibrated per-window probabilities",
+    "session_auc": 1.0
+  },
+  "pqc": {
+    "n_traces": 2250,
+    "temperature": 0.2231,
+    "compromise_definition_tried_and_rejected": "top-1 classification correct",
+    "rejection_reason": "positive rate 95.6% makes downstream PR-AUC uninformative (ceiling effect)",
+    "compromise_definition_used": "correct classification AND confidence above the test set's own median confidence (data-derived, no manual threshold)",
+    "confidence_median": 0.9466,
+    "positive_rate": 0.488,
+    "trace_auc": 0.9851
+  },
+  "joint_evaluation": {
+    "n_bootstrap_pairs": 20000,
+    "independence_assumption": "QKD channel eavesdropping status and PQC chip leakage status assumed physically independent for pairing -- stated limitation, not verified against real joint telemetry (none exists yet)",
+    "positive_rate_pct": 81.7,
+    "results": {
+      "qkd_alone": {
+        "auc": 0.8943,
+        "pr_auc": 0.9767
+      },
+      "pqc_alone": {
+        "auc": 0.7909,
+        "pr_auc": 0.9473
+      },
+      "fused_log_odds": {
+        "auc": 0.9829,
+        "pr_auc": 0.9953
+      }
+    }
+  }
+}

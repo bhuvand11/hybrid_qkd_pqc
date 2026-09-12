@@ -1,0 +1,33 @@
+{
+  "source": "qkd/qkd_lstm_training_STEP4.ipynb, cells 43-46 (extracted from cached notebook output)",
+  "n_seeds": 7,
+  "seeds": [1, 2, 3, 4, 5, 6, 7],
+  "note": "Each seed = independent BB84 decoy-state dataset generation + full LSTM/RF/static-baseline training+eval pipeline (section 16 of the notebook). Reported as mean +/- std per method/split, per the notebook's own reporting guidance (cell 48).",
+  "results": {
+    "LSTM": {
+      "ALL":      {"auc_mean": 0.9619, "auc_std": 0.0047, "pr_auc_mean": 0.9151, "pr_auc_std": 0.0138},
+      "IR_only":  {"auc_mean": 0.9777, "auc_std": 0.0049, "pr_auc_mean": 0.9441, "pr_auc_std": 0.0123},
+      "PNS_only": {"auc_mean": 0.9474, "auc_std": 0.0062, "pr_auc_mean": 0.8527, "pr_auc_std": 0.0234}
+    },
+    "Random Forest": {
+      "ALL":      {"auc_mean": 0.9534, "auc_std": 0.0053, "pr_auc_mean": 0.8909, "pr_auc_std": 0.0151},
+      "IR_only":  {"auc_mean": 0.9751, "auc_std": 0.0041, "pr_auc_mean": 0.9354, "pr_auc_std": 0.0120},
+      "PNS_only": {"auc_mean": 0.9332, "auc_std": 0.0077, "pr_auc_mean": 0.8005, "pr_auc_std": 0.0294}
+    },
+    "Static QBER (per-link)": {
+      "ALL":      {"auc_mean": 0.8288, "auc_std": 0.0165, "pr_auc_mean": 0.6369, "pr_auc_std": 0.0227},
+      "IR_only":  {"auc_mean": 0.9836, "auc_std": 0.0042, "pr_auc_mean": 0.9472, "pr_auc_std": 0.0087},
+      "PNS_only": {"auc_mean": 0.6855, "auc_std": 0.0312, "pr_auc_mean": 0.1543, "pr_auc_std": 0.0355}
+    },
+    "Static QBER+throughput (per-link)": {
+      "ALL":      {"auc_mean": 0.9530, "auc_std": 0.0059, "pr_auc_mean": 0.8858, "pr_auc_std": 0.0155},
+      "IR_only":  {"auc_mean": 0.9802, "auc_std": 0.0040, "pr_auc_mean": 0.9396, "pr_auc_std": 0.0096},
+      "PNS_only": {"auc_mean": 0.9278, "auc_std": 0.0096, "pr_auc_mean": 0.7803, "pr_auc_std": 0.0300}
+    }
+  },
+  "headline_finding": "On PNS_only (the QBER-silent attack), the naive QBER-only static threshold nearly collapses (PR-AUC 0.1543 +/- 0.0355, barely above a random detector) -- this part of the motivation is fully confirmed. However, this table's 'Static QBER+throughput (per-link)' row is a stronger, still-zero-ML baseline (a plain rule combining QBER with sifted-key throughput drop) that already recovers most of the performance (PR-AUC 0.7803 +/- 0.0300). Random Forest (0.8005 +/- 0.0294) and the LSTM (0.8527 +/- 0.0234) both improve further on top of that, with the LSTM ahead by a real but modest ~5-7 points of PR-AUC over the combined rule/RF -- not a dramatic rescue. The correct headline is: QBER alone is genuinely broken on PNS, feature engineering (informed by decoy-state theory) closes most of that gap even without ML, and sequence modeling adds a smaller, consistent improvement on top while giving a single unified detector for both attack types. On IR_only (the loud attack), the static threshold performs comparably to the LSTM, as expected since that is the case it was originally designed to catch. Low std across all 7 independently-generated seeds indicates all of the above is not a single-seed artifact. See qkd/single_seed_results.json for the underlying per-feature analysis (feature importances, standalone per-feature AUCs, and a no-leakage sanity check) that this finding is based on.",
+  "caveats": [
+    "Multi-seed loop reruns LSTM, Random Forest, and both static baselines per seed; it does NOT rerun the Logistic Regression baseline from the single-seed run (noted as a known gap in the notebook itself, cell 48).",
+    "Per-seed raw rows (multiseed_results_raw.csv) live only on the team's Google Drive (Colab session), not in this repo -- only the aggregated mean/std/count summary was recoverable from the notebook's saved output cells."
+  ]
+}

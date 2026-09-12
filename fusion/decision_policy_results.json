@@ -1,0 +1,125 @@
+{
+  "decision_rule": "Chow (1970) reject-option Bayes risk rule",
+  "cost_model_note": "C_FN, C_FP, C_REV are policy parameters for the deploying organization to set based on their own risk tolerance -- values here are illustrative, not derived from data",
+  "baseline_leaky_device_20_1_0_3": {
+    "t_low": 0.015,
+    "t_high": 0.7,
+    "counts": {
+      "ACCEPT": 0,
+      "FLAG": 32,
+      "REJECT": 18
+    },
+    "attacked_per_action": {
+      "ACCEPT": 0,
+      "FLAG": 14,
+      "REJECT": 18
+    }
+  },
+  "sensitivity_sweep_leaky_device": [
+    {
+      "t_low": 0.15,
+      "t_high": 0.7,
+      "counts": {
+        "ACCEPT": 0,
+        "FLAG": 32,
+        "REJECT": 18
+      },
+      "attacked_per_action": {
+        "ACCEPT": 0,
+        "FLAG": 14,
+        "REJECT": 18
+      },
+      "cost_ratio_fn_to_fp": 2
+    },
+    {
+      "t_low": 0.06,
+      "t_high": 0.7,
+      "counts": {
+        "ACCEPT": 0,
+        "FLAG": 32,
+        "REJECT": 18
+      },
+      "attacked_per_action": {
+        "ACCEPT": 0,
+        "FLAG": 14,
+        "REJECT": 18
+      },
+      "cost_ratio_fn_to_fp": 5
+    },
+    {
+      "t_low": 0.03,
+      "t_high": 0.7,
+      "counts": {
+        "ACCEPT": 0,
+        "FLAG": 32,
+        "REJECT": 18
+      },
+      "attacked_per_action": {
+        "ACCEPT": 0,
+        "FLAG": 14,
+        "REJECT": 18
+      },
+      "cost_ratio_fn_to_fp": 10
+    },
+    {
+      "t_low": 0.015,
+      "t_high": 0.7,
+      "counts": {
+        "ACCEPT": 0,
+        "FLAG": 32,
+        "REJECT": 18
+      },
+      "attacked_per_action": {
+        "ACCEPT": 0,
+        "FLAG": 14,
+        "REJECT": 18
+      },
+      "cost_ratio_fn_to_fp": 20
+    },
+    {
+      "t_low": 0.006,
+      "t_high": 0.7,
+      "counts": {
+        "ACCEPT": 0,
+        "FLAG": 32,
+        "REJECT": 18
+      },
+      "attacked_per_action": {
+        "ACCEPT": 0,
+        "FLAG": 14,
+        "REJECT": 18
+      },
+      "cost_ratio_fn_to_fp": 50
+    },
+    {
+      "t_low": 0.003,
+      "t_high": 0.7,
+      "counts": {
+        "ACCEPT": 0,
+        "FLAG": 32,
+        "REJECT": 18
+      },
+      "attacked_per_action": {
+        "ACCEPT": 0,
+        "FLAG": 14,
+        "REJECT": 18
+      },
+      "cost_ratio_fn_to_fp": 100
+    }
+  ],
+  "contrast_safer_device_20_1_0_3": {
+    "t_low": 0.015,
+    "t_high": 0.7,
+    "counts": {
+      "ACCEPT": 18,
+      "FLAG": 32,
+      "REJECT": 0
+    },
+    "attacked_per_action": {
+      "ACCEPT": 0,
+      "FLAG": 32,
+      "REJECT": 0
+    }
+  },
+  "finding": "Under the leaky reference device, NO session ever reaches ACCEPT across the entire cost-ratio sweep (2:1 through 100:1) -- the device's own 95.64% leak rate sets a compromise-probability floor above every tested accept-threshold, so the system correctly refuses to ever fully green-light a session running on known-broken hardware, regardless of how clean the QKD channel looks. Swapping in the safer device stand-in immediately unlocks ACCEPT for the cleanest sessions under the identical cost model and identical QKD data -- confirming the floor behavior is a genuine, intended property of the fusion design, not a bug."
+}
