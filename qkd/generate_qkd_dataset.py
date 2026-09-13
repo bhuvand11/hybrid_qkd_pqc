@@ -302,14 +302,26 @@ def simulate_long_timeline(
     )
     y1_lower = np.clip(y1_lower, 0.0, None)
 
+    # e1_upper: Ma-Qi-Zhao-Lo (2005) Eq. 12. Derivation: E_nu*Q_nu*e^nu =
+    # sum_n (nu^n/n!) e_n Y_n = e_0*Y_0 + nu*e_1*Y_1 + (nonneg n>=2 terms),
+    # with e_0 = 1/2 (vacuum error rate). The n=0 term carries NO nu factor,
+    # so the numerator must subtract 0.5*Y_0, not 0.5*Y_0*MU_DECOY (fixed;
+    # the previous version under-subtracted and inflated e1_upper).
     E_d = qber_obs_decoy
-    e1_upper_num   = E_d * Q_d * np.exp(MU_DECOY) - 0.5 * Y_0 * MU_DECOY
+    e1_upper_num   = E_d * Q_d * np.exp(MU_DECOY) - 0.5 * Y_0
     e1_upper_denom = MU_DECOY * y1_lower + 1e-10
     e1_upper = np.clip(e1_upper_num / e1_upper_denom, 0.0, 0.5)
 
+    # GLLP-style finite-key secure key rate: R = -Q_s*f_EC*H2(E_s) +
+    # mu*e^{-mu}*Y1^L*(1-H2(e1_upper)). Q_s must multiply ONLY the
+    # error-correction cost term (paid on every sifted bit); the
+    # single-photon privacy-amplification term is already the single-photon
+    # gain mu*e^{-mu}*Y1^L and must not be scaled by Q_s again (fixed; the
+    # previous version multiplied both terms by Q_s, double-counting it in
+    # the second term).
     E_s = qber_obs_signal
-    secure_key_rate = Q_s * (
-        -F_EC * _binary_entropy(E_s)
+    secure_key_rate = (
+        -Q_s * F_EC * _binary_entropy(E_s)
         + MU_SIGNAL * np.exp(-MU_SIGNAL) * y1_lower * (1.0 - _binary_entropy(e1_upper))
     )
     secure_key_rate = np.clip(secure_key_rate, 0.0, None)
