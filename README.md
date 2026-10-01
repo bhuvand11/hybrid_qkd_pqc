@@ -2,7 +2,7 @@
 
 **Physical-layer AI/ML detection of eavesdropping and side-channel leakage for quantum-safe key security**
 
-A capstone research project (B.Tech CSE, NMIMS Mukesh Patel School of Technology Management & Engineering, Mumbai) that builds two independent machine-learning detectors — one for Quantum Key Distribution (QKD) eavesdropping, one for Post-Quantum Cryptography (PQC) side-channel leakage — and fuses them into a single, real-time Accept/Flag/Reject key-trust decision.
+A project that builds two independent machine-learning detectors — one for Quantum Key Distribution (QKD) eavesdropping, one for Post-Quantum Cryptography (PQC) side-channel leakage — and fuses them into a single, real-time Accept/Flag/Reject key-trust decision.
 
 ---
 
