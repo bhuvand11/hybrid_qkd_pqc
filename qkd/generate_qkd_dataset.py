@@ -190,15 +190,36 @@ def simulate_long_timeline(
         misalignment_now * signal_click_p_compat + 0.5 * dark_p
     ) / (signal_click_p_compat + dark_p + 1e-12)
 
+    # Attack-episode sampling. "combined" independently samples an IR episode
+    # set AND a PNS episode set over the same timeline, so the two attack
+    # signatures can co-occur (overlapping ticks carry both is_ir and is_pns
+    # simultaneously) rather than being mutually exclusive, unlike
+    # "pure_ir"/"pure_pns" which only ever carry one. This is a diagnostic
+    # addition to test detector robustness against non-pure attack mixes;
+    # it does not change the behavior of any existing run_type.
     if run_type == "clean":
-        episodes = []
+        ir_episodes, pns_episodes = [], []
+    elif run_type == "pure_ir":
+        ir_episodes, pns_episodes = sample_attack_episodes(rng, duration_s, "intercept_resend"), []
+    elif run_type == "pure_pns":
+        ir_episodes, pns_episodes = [], sample_attack_episodes(rng, duration_s, "pns_like")
+    elif run_type == "combined":
+        ir_episodes = sample_attack_episodes(rng, duration_s, "intercept_resend")
+        pns_episodes = sample_attack_episodes(rng, duration_s, "pns_like")
     else:
-        forced_kind = "intercept_resend" if run_type == "pure_ir" else "pns_like"
-        episodes = sample_attack_episodes(rng, duration_s, forced_kind)
+        raise ValueError(f"unknown run_type: {run_type!r}")
 
-    kind_arr, strength_arr = episodes_to_arrays(episodes, duration_s)
-    is_pns = (kind_arr == "pns_like").astype(float)
-    is_ir  = (kind_arr == "intercept_resend").astype(float)
+    _, strength_arr_ir = episodes_to_arrays(ir_episodes, duration_s)
+    _, strength_arr_pns = episodes_to_arrays(pns_episodes, duration_s)
+    is_ir  = (strength_arr_ir > 0).astype(float)
+    is_pns = (strength_arr_pns > 0).astype(float)
+    kind_arr = np.where(
+        (is_ir > 0) & (is_pns > 0), "combined",
+        np.where(is_ir > 0, "intercept_resend", np.where(is_pns > 0, "pns_like", "none")),
+    )
+    # strength_arr kept only for backward-compatible callers; attack-specific
+    # arrays (strength_arr_ir, strength_arr_pns) are what feed the physics below.
+    strength_arr = np.maximum(strength_arr_ir, strength_arr_pns)
 
     # PNS attack model (v2, corrected against the decoy-state PNS literature):
     #
@@ -222,7 +243,7 @@ def simulate_long_timeline(
     # premise decoy-state QKD's security proof depends on, and incidentally
     # suppressing the very signal-vs-decoy asymmetry decoy-state analysis
     # is supposed to expose.)
-    pns_block_frac = np.clip(strength_arr, 0.0, 0.95)
+    pns_block_frac = np.clip(strength_arr_pns, 0.0, 0.95)
 
     effective_Q_signal = (
         y1_signal_honest * (1.0 - pns_block_frac * is_pns)
@@ -249,7 +270,7 @@ def simulate_long_timeline(
     # the single-photon flux was actually blocked, well below the primary
     # loud-attack (intercept-resend) QBER signature, rather than as a
     # dominant, free-standing term.
-    ir_contrib  = strength_arr / 4.0 * is_ir
+    ir_contrib  = strength_arr_ir / 4.0 * is_ir
     pns_contrib = pns_qber_leakage_factor * pns_block_frac * is_pns
     true_qber       = np.clip(baseline_qber + ir_contrib + pns_contrib, 0.0, 0.5)
     true_qber_decoy = np.clip(baseline_qber + ir_contrib + pns_contrib, 0.0, 0.5)
