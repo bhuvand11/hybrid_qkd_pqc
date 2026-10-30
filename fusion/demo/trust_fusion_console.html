@@ -1,0 +1,470 @@
+<title>Trust Fusion Console</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340..600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/*
+  Layout: a lab instrument console — a horizontal four-stage signal chain
+  (QKD -> PQC -> Fusion -> Decision) that lights up left-to-right when the
+  operator changes the session or device, plus a fleet-wide readout below.
+*/
+:root{
+  --bg: #12151a;
+  --panel: #1a1f26;
+  --panel-raised: #1f2530;
+  --line: #2b323c;
+  --line-soft: #232a33;
+  --fg: #eef1f4;
+  --fg-dim: #9aa6b2;
+  --fg-faint: #677280;
+  --accent: #d08a4a;
+  --accent-dim: #8a6038;
+  --accent-glow: rgba(208,138,74,0.22);
+  --accept: #4fc6b8;
+  --accept-glow: rgba(79,198,184,0.18);
+  --flag: #e3b548;
+  --flag-glow: rgba(227,181,72,0.18);
+  --reject: #e2644a;
+  --reject-glow: rgba(226,100,74,0.18);
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box;}
+body{
+  background:
+    radial-gradient(1100px 500px at 15% -8%, rgba(208,138,74,0.07), transparent 60%),
+    radial-gradient(900px 600px at 100% 10%, rgba(79,198,184,0.05), transparent 55%),
+    var(--bg);
+  color:var(--fg);
+  font-family:"IBM Plex Sans", system-ui, sans-serif;
+  line-height:1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+h1,h2,h3{font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0;}
+.mono{font-family:"IBM Plex Mono", ui-monospace, monospace;}
+.wrap{max-width:1180px; margin:0 auto; display:flex; flex-direction:column; gap:28px;}
+
+/* ---------- header ---------- */
+.header{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:16px; border-bottom:1px solid var(--line); padding-bottom:18px;}
+.header .eyebrow{font-family:"IBM Plex Mono"; font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin:0 0 8px;}
+.header h1{font-size:clamp(26px,4vw,36px); font-weight:560; color:var(--fg);}
+.header p{color:var(--fg-dim); margin:6px 0 0; max-width:46ch; font-size:14.5px;}
+.badge{font-family:"IBM Plex Mono"; font-size:11.5px; color:var(--fg-dim); border:1px solid var(--line); border-radius:100px; padding:6px 13px; display:inline-flex; align-items:center; gap:7px; white-space:nowrap;}
+.badge .dot{width:6px; height:6px; border-radius:50%; background:var(--accept); box-shadow:0 0 8px var(--accept-glow);}
+
+/* ---------- headline stat strip ---------- */
+.statrow{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+.stat{background:var(--panel); padding:16px 18px; min-width:0;}
+.stat .k{font-size:10.5px; letter-spacing:0.09em; text-transform:uppercase; color:var(--fg-faint); font-family:"IBM Plex Mono";}
+.stat .v{font-family:"IBM Plex Mono"; font-size:25px; font-weight:600; color:var(--fg); margin-top:6px; font-variant-numeric:tabular-nums;}
+.stat .v span{color:var(--accent); font-size:14px; font-weight:500; margin-left:6px;}
+.stat .d{font-size:12px; color:var(--fg-faint); margin-top:4px;}
+
+/* ---------- controls ---------- */
+.controls{display:flex; flex-wrap:wrap; gap:22px; align-items:flex-start;}
+.ctrl-group{display:flex; flex-direction:column; gap:8px; min-width:0;}
+.ctrl-group .lbl{font-family:"IBM Plex Mono"; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--fg-faint);}
+.seg{display:flex; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--panel);}
+.seg button{
+  font-family:"IBM Plex Sans"; font-size:13.5px; font-weight:500; color:var(--fg-dim);
+  background:transparent; border:none; padding:10px 16px; cursor:pointer;
+  border-right:1px solid var(--line); transition:background .15s, color .15s;
+  white-space:nowrap;
+}
+.seg button:last-child{border-right:none;}
+.seg button:hover{color:var(--fg);}
+.seg button[aria-pressed="true"]{background:var(--accent-glow); color:var(--fg); box-shadow:inset 0 0 0 1px var(--accent-dim);}
+.seg button small{display:block; font-family:"IBM Plex Mono"; font-size:10.5px; color:var(--fg-faint); font-weight:400; margin-top:2px;}
+.seg button[aria-pressed="true"] small{color:var(--accent);}
+
+.ratio-seg{display:flex; gap:6px; flex-wrap:wrap;}
+.ratio-seg button{
+  font-family:"IBM Plex Mono"; font-size:13px; color:var(--fg-dim); background:var(--panel);
+  border:1px solid var(--line); border-radius:8px; padding:8px 12px; cursor:pointer;
+  transition:all .15s;
+}
+.ratio-seg button:hover{border-color:var(--accent-dim); color:var(--fg);}
+.ratio-seg button[aria-pressed="true"]{background:var(--accent-glow); border-color:var(--accent); color:var(--fg);}
+
+/* ---------- pipeline ---------- */
+.pipeline{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px;}
+@media (max-width:860px){ .pipeline{grid-template-columns:1fr;} }
+.stage{
+  background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;
+  display:flex; flex-direction:column; gap:10px; position:relative; min-width:0;
+  transition: box-shadow .35s, border-color .35s;
+}
+.stage.lit{border-color:var(--accent-dim); box-shadow:0 0 0 1px var(--accent-dim), 0 8px 26px -14px var(--accent-glow);}
+.stage .tag{font-family:"IBM Plex Mono"; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); display:flex; align-items:center; gap:7px;}
+.stage .tag .n{width:17px; height:17px; border-radius:50%; border:1px solid var(--accent-dim); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--accent);}
+.stage h3{font-size:15.5px; font-weight:600; color:var(--fg); font-family:"IBM Plex Sans"; margin-top:2px;}
+.stage .readout{font-family:"IBM Plex Mono"; font-size:30px; font-weight:600; color:var(--fg); margin-top:2px; font-variant-numeric:tabular-nums; display:flex; align-items:baseline; gap:4px;}
+.stage .readout .unit{font-size:14px; color:var(--fg-faint); font-weight:400;}
+.stage .sub{font-size:12px; color:var(--fg-faint); font-family:"IBM Plex Mono";}
+.stage .cap{font-size:12.5px; color:var(--fg-dim); margin-top:auto; padding-top:6px; border-top:1px solid var(--line-soft);}
+.stage .barmini{height:5px; border-radius:4px; background:var(--line-soft); overflow:hidden; margin-top:2px;}
+.stage .barmini i{display:block; height:100%; background:var(--accent); border-radius:4px; transition:width .5s cubic-bezier(.4,0,.2,1);}
+
+.chev{display:none; align-items:center; justify-content:center; color:var(--fg-faint); font-size:18px;}
+@media (min-width:861px){
+  .pipeline{position:relative;}
+}
+
+/* op sign between stages, shown as small badges on the fusion card */
+.ops{display:flex; align-items:center; gap:8px; font-family:"IBM Plex Mono"; font-size:11px; color:var(--fg-faint);}
+.ops .plus{color:var(--accent); font-size:14px;}
+
+/* ---------- decision gauge ---------- */
+.gauge-card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:22px 22px 18px;}
+.gauge-card .top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:16px;}
+.gauge-card h3{font-size:16px;}
+.gauge-card p.note{color:var(--fg-dim); font-size:13px; max-width:52ch; margin:4px 0 0;}
+.gauge-track{position:relative; height:46px; border-radius:10px; overflow:hidden; display:flex; border:1px solid var(--line);}
+.gauge-track .zone{position:relative; height:100%; display:flex; align-items:center; justify-content:center; font-family:"IBM Plex Mono"; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; transition:width .5s cubic-bezier(.4,0,.2,1);}
+.gauge-track .zone.accept{background:var(--accept-glow); color:var(--accept);}
+.gauge-track .zone.flag{background:var(--flag-glow); color:var(--flag);}
+.gauge-track .zone.reject{background:var(--reject-glow); color:var(--reject);}
+.gauge-wrap{position:relative;}
+.marker{position:absolute; top:-9px; width:2px; height:64px; background:var(--fg); transform:translateX(-1px); transition:left .5s cubic-bezier(.4,0,.2,1);}
+.marker::after{content:""; position:absolute; top:-6px; left:-5px; width:12px; height:12px; border-radius:50%; background:var(--fg); box-shadow:0 0 0 4px var(--bg), 0 0 14px rgba(255,255,255,0.35);}
+.marker .mlabel{position:absolute; top:-30px; left:50%; transform:translateX(-50%); font-family:"IBM Plex Mono"; font-size:12px; color:var(--fg); white-space:nowrap; font-weight:600;}
+.scale{display:flex; justify-content:space-between; font-family:"IBM Plex Mono"; font-size:10.5px; color:var(--fg-faint); margin-top:8px;}
+.verdict{display:flex; align-items:center; gap:10px; margin-top:16px; font-family:"IBM Plex Mono"; font-size:13px;}
+.verdict .pill{padding:5px 13px; border-radius:100px; font-weight:600; letter-spacing:0.04em;}
+.pill.accept{background:var(--accept-glow); color:var(--accept); box-shadow:inset 0 0 0 1px var(--accept);}
+.pill.flag{background:var(--flag-glow); color:var(--flag); box-shadow:inset 0 0 0 1px var(--flag);}
+.pill.reject{background:var(--reject-glow); color:var(--reject); box-shadow:inset 0 0 0 1px var(--reject);}
+.verdict .expl{color:var(--fg-dim);}
+.thresh-readout{display:flex; gap:22px; margin-top:14px; flex-wrap:wrap;}
+.thresh-readout div{font-family:"IBM Plex Mono"; font-size:12px; color:var(--fg-faint);}
+.thresh-readout div b{color:var(--fg); font-size:14px; display:block; margin-top:2px;}
+
+/* ---------- fleet panel ---------- */
+.fleet-card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:22px;}
+.fleet-card h3{font-size:16px; margin-bottom:4px;}
+.fleet-card p.note{color:var(--fg-dim); font-size:13px; max-width:68ch; margin:0 0 20px;}
+.fleet-row{display:flex; flex-direction:column; gap:8px; margin-bottom:18px;}
+.fleet-row:last-child{margin-bottom:0;}
+.fleet-row .flabel{display:flex; justify-content:space-between; font-family:"IBM Plex Mono"; font-size:12px; color:var(--fg-dim);}
+.fleet-row .flabel b{color:var(--fg); font-weight:600;}
+.fbar{display:flex; height:30px; border-radius:7px; overflow:hidden; border:1px solid var(--line);}
+.fbar .seg2{display:flex; align-items:center; justify-content:center; font-family:"IBM Plex Mono"; font-size:11.5px; font-weight:600; transition:width .6s cubic-bezier(.4,0,.2,1); white-space:nowrap; overflow:hidden;}
+.fbar .seg2.accept{background:var(--accept); color:#0d1a18;}
+.fbar .seg2.flag{background:var(--flag); color:#1d1508;}
+.fbar .seg2.reject{background:var(--reject); color:#220b05;}
+.fleet-foot{display:flex; gap:18px; font-family:"IBM Plex Mono"; font-size:11.5px; color:var(--fg-faint); margin-top:4px; flex-wrap:wrap;}
+.fleet-foot span{display:flex; align-items:center; gap:6px;}
+.swatch{width:9px; height:9px; border-radius:2px; display:inline-block;}
+
+.sweep-note{margin-top:18px; padding-top:16px; border-top:1px solid var(--line-soft); font-size:12.5px; color:var(--fg-dim); display:flex; gap:10px; align-items:flex-start;}
+.sweep-note .icon{color:var(--accept); font-family:"IBM Plex Mono"; font-size:13px; flex-shrink:0; margin-top:1px;}
+
+footer{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; color:var(--fg-faint); font-size:11.5px; font-family:"IBM Plex Mono"; border-top:1px solid var(--line); padding-top:16px;}
+footer a{color:var(--fg-dim);}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition-duration:0.01ms !important;}
+}
+</style>
+
+<div class="wrap">
+
+  <div class="header">
+    <div>
+      <p class="eyebrow">Hybrid QKD + PQC &middot; Trust Assessment Pipeline</p>
+      <h1>Trust Fusion Console</h1>
+      <p>A replay of the exact inference run behind the project's headline results &mdash; real saved model outputs, real log-odds fusion, real decision thresholds. Pick a session and a device below.</p>
+    </div>
+    <span class="badge"><span class="dot"></span>Replaying saved inference &middot; no live training</span>
+  </div>
+
+  <div class="statrow">
+    <div class="stat">
+      <div class="k">QKD-alone AUC</div>
+      <div class="v">1.0000</div>
+      <div class="d">LSTM ranks all 50 sessions perfectly by risk</div>
+    </div>
+    <div class="stat">
+      <div class="k">Fused AUC (check)</div>
+      <div class="v">1.0000<span>match</span></div>
+      <div class="d">Adding device risk never reorders sessions</div>
+    </div>
+    <div class="stat">
+      <div class="k">Reference chip leak rate</div>
+      <div class="v">95.64<span>%</span></div>
+      <div class="d">95% CI [94.72, 96.41] &middot; n=2250 traces</div>
+    </div>
+    <div class="stat">
+      <div class="k">Inference latency</div>
+      <div class="v">0.50<span>ms</span></div>
+      <div class="d">Per window, batch size 1, LSTM branch</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="ctrl-group">
+      <span class="lbl">QKD Session</span>
+      <div class="seg" id="sessionSeg">
+        <button data-session="clean" aria-pressed="true">Session #5 <small>clean, run flagged none</small></button>
+        <button data-session="attacked" aria-pressed="false">Session #97 <small>intercept-resend</small></button>
+      </div>
+    </div>
+    <div class="ctrl-group">
+      <span class="lbl">PQC Hardware</span>
+      <div class="seg" id="deviceSeg">
+        <button data-device="leaky" aria-pressed="true">Reference chip <small>CNN power-trace attack</small></button>
+        <button data-device="safer" aria-pressed="false">Safer stand-in <small>weaker PCA+RF attacker</small></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pipeline">
+    <div class="stage" id="stageQkd">
+      <div class="tag"><span class="n">1</span>QKD Channel</div>
+      <h3>LSTM risk score</h3>
+      <div class="readout"><span id="qkdVal">0.83</span><span class="unit">% risk</span></div>
+      <div class="barmini"><i id="qkdBar" style="width:0.83%"></i></div>
+      <div class="sub" id="qkdSub">run_id 5 &middot; attack_kind: none</div>
+      <div class="cap">Reads a 60-tick window of QBER, sifted-key rate and timing. Output is P(attack) for this one session.</div>
+    </div>
+
+    <div class="stage" id="stagePqc">
+      <div class="tag"><span class="n">2</span>PQC Device</div>
+      <h3>Power-trace leak rate</h3>
+      <div class="readout"><span id="pqcVal">95.64</span><span class="unit">% leak</span></div>
+      <div class="barmini"><i id="pqcBar" style="width:95.64%; background:var(--reject);"></i></div>
+      <div class="sub" id="pqcSub">CI [94.72, 96.41] &middot; n=2250</div>
+      <div class="cap">Fixed property of the chip &mdash; the <em>same</em> number for every session, since it's about hardware, not the quantum channel.</div>
+    </div>
+
+    <div class="stage" id="stageFusion">
+      <div class="tag"><span class="n">3</span>Fusion</div>
+      <h3>Log-odds combination</h3>
+      <div class="readout"><span id="trustVal">84.4</span><span class="unit">% trust</span></div>
+      <div class="barmini"><i id="trustBar" style="width:84.4%; background:var(--accept);"></i></div>
+      <div class="sub ops"><span>logit(QKD)</span><span class="plus">+</span><span>logit(PQC)</span><span class="plus">&rarr;</span><span id="compromiseVal">15.6% compromise</span></div>
+      <div class="cap">Sums both risks in log-odds space, then converts back to a probability. Same formula, every session, every device.</div>
+    </div>
+
+    <div class="stage" id="stageDecision">
+      <div class="tag"><span class="n">4</span>Decision</div>
+      <h3>Chow's reject rule</h3>
+      <div class="readout"><span id="decisionVal" style="font-size:24px;">FLAG</span></div>
+      <div class="sub" id="decisionSub">14 of 32 flagged sessions are really attacked</div>
+      <div class="cap">Turns the trust score into Accept / Flag / Reject using the cost of each type of mistake.</div>
+    </div>
+  </div>
+
+  <div class="gauge-card">
+    <div class="top">
+      <div>
+        <h3>Cost-ratio sweep</h3>
+        <p class="note">C<sub>FN</sub> : C<sub>FP</sub> : C<sub>REV</sub> &mdash; how many times worse is accepting a compromised session than wrongly rejecting a clean one? Pick a ratio to move the thresholds.</p>
+      </div>
+      <div class="ratio-seg" id="ratioSeg">
+        <button data-ratio="2" aria-pressed="false">2:1</button>
+        <button data-ratio="5" aria-pressed="false">5:1</button>
+        <button data-ratio="10" aria-pressed="false">10:1</button>
+        <button data-ratio="20" aria-pressed="true">20:1</button>
+        <button data-ratio="50" aria-pressed="false">50:1</button>
+        <button data-ratio="100" aria-pressed="false">100:1</button>
+      </div>
+    </div>
+
+    <div class="gauge-wrap">
+      <div class="gauge-track">
+        <div class="zone accept" id="zoneAccept" style="width:1.5%;">Accept</div>
+        <div class="zone flag" id="zoneFlag" style="width:68.5%;">Flag</div>
+        <div class="zone reject" id="zoneReject" style="width:30%;">Reject</div>
+      </div>
+      <div class="marker" id="marker" style="left:15.6%;"><span class="mlabel" id="markerLabel">15.6%</span></div>
+    </div>
+    <div class="scale"><span>0% compromise probability</span><span>100%</span></div>
+
+    <div class="verdict">
+      <span class="pill flag" id="verdictPill">FLAG</span>
+      <span class="expl" id="verdictExpl">15.6% falls between the accept and reject thresholds &mdash; routed to manual review.</span>
+    </div>
+    <div class="thresh-readout">
+      <div>Accept if p &lt;<b id="tLowVal">0.015</b></div>
+      <div>Reject if p &gt;<b id="tHighVal">0.700</b></div>
+      <div>From C<sub>REV</sub>/C<sub>FN</sub> and 1&minus;C<sub>REV</sub>/C<sub>FP</sub></div>
+    </div>
+  </div>
+
+  <div class="fleet-card">
+    <h3>All 50 held-out sessions, same cost model</h3>
+    <p class="note">The baseline 20:1:0.3 policy run across every test session &mdash; identical QKD data both times, only the hardware risk input changes.</p>
+
+    <div class="fleet-row">
+      <div class="flabel"><span>Reference chip (95.64% leak rate)</span><b>0 accept &middot; 32 flag &middot; 18 reject</b></div>
+      <div class="fbar">
+        <div class="seg2 accept" style="width:0.1%"></div>
+        <div class="seg2 flag" style="width:64%">32 &middot; 14 attacked</div>
+        <div class="seg2 reject" style="width:36%">18 &middot; 18 attacked</div>
+      </div>
+    </div>
+
+    <div class="fleet-row">
+      <div class="flabel"><span>Safer stand-in (42.33% leak rate)</span><b>18 accept &middot; 32 flag &middot; 0 reject</b></div>
+      <div class="fbar">
+        <div class="seg2 accept" style="width:36%">18 &middot; 0 attacked</div>
+        <div class="seg2 flag" style="width:64%">32 &middot; 32 attacked</div>
+        <div class="seg2 reject" style="width:0.1%"></div>
+      </div>
+    </div>
+
+    <div class="fleet-foot">
+      <span><i class="swatch" style="background:var(--accept)"></i>Accept (automatic)</span>
+      <span><i class="swatch" style="background:var(--flag)"></i>Flag (manual review)</span>
+      <span><i class="swatch" style="background:var(--reject)"></i>Reject (automatic)</span>
+    </div>
+
+    <div class="sweep-note">
+      <span class="icon">&#10003;</span>
+      <span>With the reference chip, this 0 / 32 / 18 split is identical at every tested ratio from 2:1 to 100:1 &mdash; a 50&times; range of risk tolerance never once lets a session through automatically. The safer-device run uses the baseline 20:1:0.3 model.</span>
+    </div>
+  </div>
+
+  <footer>
+    <span>fusion_v2_device_risk.py &middot; decision_policy.py &middot; numbers reproduced from the saved test-set artifacts</span>
+    <span>Hybrid QKD&ndash;PQC Trust Assessment</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var DATA = {
+    sessions: {
+      clean:    { runLabel: "run_id 5 · attack_kind: none",             risk: 0.83  },
+      attacked: { runLabel: "run_id 97 · attack_kind: intercept_resend", risk: 19.29 }
+    },
+    devices: {
+      leaky: { label: "CI [94.72, 96.41] · n=2250", leak: 95.64 },
+      safer: { label: "CI [40.57, 44.11] · n=3000", leak: 42.33 }
+    },
+    // baked trust/compromise results per session x device, taken directly from the real run
+    trust: {
+      clean:    { leaky: { trust: 84.4,  compromise: 15.6 },  safer: { trust: 99.39, compromise: 0.61 } },
+      attacked: { leaky: { trust: 16.0,  compromise: 84.0 },  safer: { trust: 85.07, compromise: 14.93 } }
+    },
+    // real tested cost ratios; C_FP=1, C_REV=0.3 fixed, so tHigh is always 0.700
+    ratios: { 2:0.150, 5:0.060, 10:0.030, 20:0.015, 50:0.006, 100:0.003 },
+    tHigh: 0.700
+  };
+
+  var state = { session: "clean", device: "leaky", ratio: 20 };
+
+  function $(id){ return document.getElementById(id); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+
+  function animateNumber(el, from, to, decimals, suffix){
+    var dur = 550, start = null;
+    function ease(t){ return 1 - Math.pow(1 - t, 3); }
+    function step(ts){
+      if(start === null) start = ts;
+      var p = Math.min(1, (ts - start) / dur);
+      var v = from + (to - from) * ease(p);
+      el.textContent = v.toFixed(decimals) + (suffix || "");
+      if(p < 1) requestAnimationFrame(step);
+      else el.textContent = to.toFixed(decimals) + (suffix || "");
+    }
+    requestAnimationFrame(step);
+  }
+
+  function classify(p, tLow, tHigh){
+    if(p < tLow) return "accept";
+    if(p > tHigh) return "reject";
+    return "flag";
+  }
+
+  function render(prevCompromise){
+    var sess = DATA.sessions[state.session];
+    var dev = DATA.devices[state.device];
+    var result = DATA.trust[state.session][state.device];
+    var tLow = DATA.ratios[state.ratio];
+    var tHigh = DATA.tHigh;
+
+    // stage 1: QKD
+    var qkdValEl = $("qkdVal");
+    animateNumber(qkdValEl, parseFloat(qkdValEl.textContent) || 0, sess.risk, 2);
+    $("qkdBar").style.width = Math.min(100, sess.risk) + "%";
+    $("qkdSub").textContent = sess.runLabel;
+
+    // stage 2: PQC
+    var pqcValEl = $("pqcVal");
+    animateNumber(pqcValEl, parseFloat(pqcValEl.textContent) || 0, dev.leak, 2);
+    $("pqcBar").style.width = dev.leak + "%";
+    $("pqcSub").textContent = dev.label;
+
+    // stage 3: fusion
+    var trustValEl = $("trustVal");
+    animateNumber(trustValEl, parseFloat(trustValEl.textContent) || 0, result.trust, 2);
+    $("trustBar").style.width = result.trust + "%";
+    $("trustBar").style.background = result.trust >= 50 ? "var(--accept)" : "var(--reject)";
+    $("compromiseVal").textContent = result.compromise.toFixed(2) + "% compromise";
+
+    // stage 4 + gauge
+    var verdict = classify(result.compromise / 100, tLow, tHigh);
+    var labelMap = { accept: "ACCEPT", flag: "FLAG", reject: "REJECT" };
+    var explMap = {
+      accept: result.compromise.toFixed(1) + "% is below the accept threshold — cleared automatically.",
+      flag: result.compromise.toFixed(1) + "% falls between the accept and reject thresholds — routed to manual review.",
+      reject: result.compromise.toFixed(1) + "% is above the reject threshold — blocked automatically."
+    };
+    $("decisionVal").textContent = labelMap[verdict];
+    $("decisionSub").textContent = state.device === "leaky"
+      ? "14 of 32 flagged sessions are really attacked"
+      : "32 of 32 flagged sessions are really attacked";
+    $("verdictPill").className = "pill " + verdict;
+    $("verdictPill").textContent = labelMap[verdict];
+    $("verdictExpl").textContent = explMap[verdict];
+
+    $("tLowVal").textContent = tLow.toFixed(3);
+    $("tHighVal").textContent = tHigh.toFixed(3);
+
+    var acceptPct = tLow * 100;
+    var rejectPct = (1 - tHigh) * 100;
+    var flagPct = 100 - acceptPct - rejectPct;
+    $("zoneAccept").style.width = acceptPct + "%";
+    $("zoneFlag").style.width = flagPct + "%";
+    $("zoneReject").style.width = rejectPct + "%";
+
+    $("marker").style.left = result.compromise + "%";
+    $("markerLabel").textContent = result.compromise.toFixed(1) + "%";
+
+    qsa(".stage").forEach(function(s){ s.classList.add("lit"); });
+  }
+
+  function wireSeg(containerId, dataAttr, stateKey){
+    qsa("#" + containerId + " button").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        qsa("#" + containerId + " button").forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
+        btn.setAttribute("aria-pressed", "true");
+        state[stateKey] = btn.getAttribute(dataAttr);
+        render();
+      });
+    });
+  }
+
+  wireSeg("sessionSeg", "data-session", "session");
+  wireSeg("deviceSeg", "data-device", "device");
+
+  qsa("#ratioSeg button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      qsa("#ratioSeg button").forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
+      btn.setAttribute("aria-pressed", "true");
+      state.ratio = parseInt(btn.getAttribute("data-ratio"), 10);
+      render();
+    });
+  });
+
+  render();
+})();
+</script>
